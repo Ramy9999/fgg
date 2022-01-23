@@ -15,8 +15,8 @@ from gevent.pywsgi import WSGIServer
 
 #newly added
 import numpy as np
-import pandas as pd
-from PIL import  Image
+# import pandas as pd
+from PIL import Image
 
 # from data.create_data import create_table
 
