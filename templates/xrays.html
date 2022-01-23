@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+  <html>
+      <head>
+          <meta charset="utf-8">
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/brython@3.10.1/brython.min.js">
+    </script>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/brython@3.10.1/brython_stdlib.js">
+    </script>
+          <title>Covid19 Image Classifier Detector</title>
+          <link href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+<!--          <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">-->
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+          <meta name="Covid19 Chest Image Scan Detector" content="Detect Whether a Chest Image Scan Has Covid19 or not">
+          <link rel="icon" href="{{url_for('static', filename='images/clean_hands_open_hearts_covid19footerimage2-removebg-preview.png')}}" type="image/" >
+<!--          <link rel="stylesheet" href="styles/styles.css" />-->
+          <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+          <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+      </head>
+      <body onload="brython()">
+<!--      <input type="button" id='script' name="scriptbutton" value=" Run Script " onclick="goPython()">-->
+      <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+          <header class="main-header">
+              <nav class="nav main-nav center">
+                  <ul>
+                      <li><a href="/">Home (CT and Xray Together)</a></li>
+                      <li class="active"><a href="/xray">Xray</a></li>
+                      <li><a href="/ct">CT</a></li>
+                  </ul>
+              </nav>
+              <h1 class="band-name zakcenter">COVID19 Chest Image Xray Detector</h1>
+
+          </header>
+          <br>
+          <hr>
+          <br>
+          <section class="content-section container">
+              <h3 class="section-header">Upload Chest Xray Image(s)</h3>
+<!--              <i class="fas fa-cloud-upload-alt"></i>-->
+              <br>
+<!--              <form action=C:/xampp/cgi-bin/querySupplierPart.py method=“GET” id="partformcoloraddress">-->
+              <form id="upload-file" method="post" enctype="multipart/form-data">
+                  <img src="{{url_for('static', filename='images/covidback.jfif')}}" class="center">
+                  <img src="{{url_for('static', filename='images/covidback.jfif')}}" class="center">
+<!--                  <i class="fas fa-cloud-upload-alt"></i>-->
+<!--                  <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>-->
+                  <br>
+                  <div class="drag-area center">
+                  <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                  <header>Drag & Drop to Upload File</header>
+                  <span>OR</span>
+                  <span>Upload Image Below</span>
+                  <input type="file" hidden>
+                  </div>
+
+                  <br>
+                  <div style="height:0px;overflow:hidden">
+<!--                  <input type="file" id="fileInput" name="fileInput" accept="image/*" multiple/>-->
+                      <input type="file" name="file" id="imageUpload" accept="image/*">
+                  </div>
+<!--                  <label for="imageUpload" class="partButton" onclick="chooseFile();">-->
+<!--                  ...Select File...-->
+<!--                  </label>-->
+                  <button class="partButton2" onclick="chooseFile();" type="button">Upload</button>
+                  <br>
+              <p class="sakcenter"><h2 class="sakcenter">Detect Whether the uploaded Xray Chest Scan Image(s) has Covid19:</h2></p>
+<!--               <p>Please enter <strong>Both</strong> the part's color and its supplier(s) address respectively in the following to retrieve its part(s) names:</p>-->
+<!--                  <label for="pcolor" class="partLabel">Part Color:</label>-->
+<!--                 <input required class="suppliersInput" type="text" id="pcolor" name="searchboxpcolor" placeholder="Enter Part's Color"><br><br>-->
+<!--                 <label for="address" class="partLabel">Part's Supplier(s)' Address:</label>-->
+<!--                 <input required class="suppliersInput" type="text" id="address" name="searchboxaddress" placeholder="Enter Supplier's Address"><br><br>-->
+               </form>
+              <img src="{{url_for('static', filename='images/downarrowverygood4-removebg-preview.png')}}" class="center" width="10%" height="2%">
+<!--               <button class="detectButton" type="submit" form="partformcoloraddress" value="Submit" onclick="showProgressBar()" id="detectCovid19Bt">Detect COVID19</button>-->
+
+<!--              <button type="button" class="detectButton" id="btn-predict">Detect Covid19</button>-->
+              <div class="image-section center" style="display:none;">
+              <div class="img-preview center">
+            <div id="imagePreview" class="center">
+            </div>
+            </div>
+            <div>
+            <button type="button" class="detectButton" id="btn-predict2">Detect Covid19</button>
+            </div>
+            </div>
+
+
+
+              <div class="loader center" style="display:none;"></div>
+             <br>
+             <h3 id="result" class="center">
+             <span class="center"> </span>
+             </h3>
+
+              <br>
+              <div class="circular center" id="progressBarDIV">
+    <div class="inner"></div>
+    <div class="number" id="numpb">0%</div>
+    <div class="circle">
+      <div class="bar left">
+        <div class="progress"></div>
+      </div>
+      <div class="bar right">
+        <div class="progress"></div>
+      </div>
+    </div>
+  </div>
+               <br><br>
+<!--               <form action=C:/xampp/cgi-bin/querySupplierPart.py method=“GET” id="partformaddressonly">-->
+<!--              <p><h2>Retrieve the supplier(s) Ids or sids, and names of the suppliers in the address you enter in the following who do not supply any part.</h2></p>-->
+<!--               <p>Please enter the suppliers Address to retrieve its corresponding supplier(s) Ids and Names who do not supply any part:</p>-->
+<!--                  <label for="addressonly" class="partLabel">Supplier(s) Address:</label>-->
+<!--                 <input required class="suppliersInput" type="text" id="addressonly" name="searchboxaddressonly" placeholder="Enter Supplier's Address"><br><br>-->
+<!--               </form>-->
+<!--               <button class="partButton" type="submit" form="partformaddressonly" value="Submit">Submit</button>-->
+<!--               <br><br>           -->
+<!--              <h3 class="section-header">Suppliers:</h3>-->
+<!--               <div>-->
+<!--                  <div class="tour-row">-->
+<!--                      <span class="tour-item tour-date">October 7 2021</span>-->
+<!--                      <span class="tour-item tour-date">sid1</span>-->
+<!--                      <span class="tour-item tour-city">Supplier 1</span>-->
+<!--                      <span class="tour-item tour-arena">Supplier 1 Address</span>-->
+<!--                      <button type="button" class="tour-item tour-btn btn btn-primary">Contact</button>-->
+<!--                  </div>-->
+<!--                  <div class="tour-row">-->
+<!--                      <span class="tour-item tour-date">July 18 2021</span>-->
+<!--                      <span class="tour-item tour-date">sid2</span>-->
+<!--                      <span class="tour-item tour-city">Supplier 2</span>-->
+<!--                      <span class="tour-item tour-arena">Supplier 2 Address</span>-->
+<!--                      <button type="button" class="tour-item tour-btn btn btn-primary">Contact</button>-->
+<!--                  </div>-->
+<!--                  <div class="tour-row">-->
+<!--                      <span class="tour-item tour-date">June 22 2021</span>-->
+<!--                      <span class="tour-item tour-date">sid3</span>-->
+<!--                      <span class="tour-item tour-city">Supplier 3</span>-->
+<!--                      <span class="tour-item tour-arena">Supplier 3 Address</span>-->
+<!--                      <button type="button" class="tour-item tour-btn btn btn-primary">Contact</button>-->
+<!--                  </div>-->
+<!--                  <div class="tour-row">-->
+<!--                      <span class="tour-item tour-date">June 19 2021</span>-->
+<!--                      <span class="tour-item tour-date">sid4</span>-->
+<!--                      <span class="tour-item tour-city">Supplier 4</span>-->
+<!--                      <span class="tour-item tour-arena">Supplier 4 Address</span>-->
+<!--                      <button type="button" class="tour-item tour-btn btn btn-primary">Contact</button>-->
+<!--                  </div>-->
+<!--                  <div class="tour-row">-->
+<!--                      <span class="tour-item tour-date">February 10 2021</span>-->
+<!--                      <span class="tour-item tour-date">sid5</span>-->
+<!--                      <span class="tour-item tour-city">Supplier 5</span>-->
+<!--                      <span class="tour-item tour-arena">Supplier 5 Address</span>-->
+<!--                      <button type="button" class="tour-item tour-btn btn btn-primary">Contact</button>-->
+<!--                  </div>-->
+<!--                  <div class="tour-row">-->
+<!--                      <span class="tour-item tour-date">AUG 18 2020</span>-->
+<!--                      <span class="tour-item tour-date">sid6</span>-->
+<!--                      <span class="tour-item tour-city">Supplier 6</span>-->
+<!--                      <span class="tour-item tour-arena">Supplier 6 Address</span>-->
+<!--                      <button type="button" class="tour-item tour-btn btn btn-primary">Contact</button>-->
+<!--                  </div>-->
+<!--              </div>-->
+          </section>
+          <hr>
+          <footer class="main-footer">
+              <div class="container main-footer-container">
+                  <h3 class="seekcenter">Covid19 Image Classifier Detector</h3>
+                  <ul class="nav footer-nav">
+                      <li>
+                          <a href="https://www.youtube.com" target="_blank">
+                              <img src="{{url_for('static', filename='images/youtubelogo.png')}}">
+                          </a>
+                      </li>
+                      <li>
+                          <a href="https://www.facebook.com" target="_blank">
+                              <img src="{{url_for('static', filename='images/facebooktextlogo.png')}}">
+                          </a>
+                      </li>
+                      <li>
+                          <a href="https://github.com" target="_blank">
+                              <img src="{{url_for('static', filename='images/githublogoblackinside.png')}}">
+                          </a>
+                      </li>
+                  </ul>
+              </div>
+              <p class="seekcenter2">Copyright &copy; <script>document.write(new Date().getFullYear())</script> By Ramy Elsaraf, All Rights Reserved.</p>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}" type="text/javascript"></script>
+     <script src="{{ url_for('static', filename='js/script.js') }}" type="text/javascript"></script>
+          </footer>
+      </body>
+  </html>
+
+<script>
+    $("li").click(
+    function(event) {
+      $('li').removeClass('active');
+      $(this).addClass('active');
+<!--      event.preventDefault()-->
+    }
+);
+
+   function chooseFile() {
+      document.getElementById("imageUpload").click();
+   }
+
+   function showProgressBar() {
+  var totalSeconds = 0;
+  var percentageNum = document.getElementById("numpb");
+  var x = document.getElementById("progressBarDIV");
+  var y = document.getElementById("detectCovid19Bt");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+    y.style.display = "block";
+  } else {
+    x.style.display = "block";
+    y.style.display = "none";
+
+    var i = 0;
+function move() {
+  if (i == 0) {
+    i = 1;
+    var elem = document.getElementById("numpb");
+    var width = 10;
+    var id = setInterval(frame, 100);
+    function frame() {
+      if (width >= 100) {
+        clearInterval(id);
+        i = 0;
+      } else {
+        width++;
+        elem.innerHTML = width + "%";
+      }
+    }
+  }
+}
+
+move();
+
+    setTimeout(function(){x.style.display = "none";
+    y.style.display = "block";},10000);
+  }
+}
+
+function goPython(){
+            $.ajax({
+              url: "rps_app.py",
+             context: document.body
+            }).done(function() {
+             alert('finished python script');;
+            });
+        }
+</script>
+<script type="text/python">
+def seeko():
+ print("Hello");
+</script>
