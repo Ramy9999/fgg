@@ -1,12 +1,1 @@
-entrypoint: "gunicorn -b :$PORT main:app"
-env: flex
-runtime: python
-runtime_config: 
-  python_version: 37  #python 2 write 27 or specify the version like 3.5 
-#  if need to scale 
-# manual_scaling:
-#   instances: 1
-# resources:
-#   cpu: 1
-#   memory_gb: 0.5
-#   disk_size_gb: 10
+runtime: python37
