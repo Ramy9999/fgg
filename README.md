@@ -8,7 +8,7 @@ To run the project:
 
 2- Install the dependancies and project requirements and libraries in the requirements.txt file by: pip install -r requirements.txt
 
-3- Run in the terminal python app.py or alternatively run the app.py python file in your python supported IDE (preferrably PyCharm)
+3- Run in the terminal python app.py or application.py or main.py (whatever the python file is called), or alternatively run the app.py or the other names of the python file in your python supported IDE (preferrably PyCharm)
 
 4- In the terminal output after some time and the project is built, you will have the local host link: http://127.0.0.1:5000/; click on it to open the web app in the browser
 
