@@ -94,10 +94,12 @@ def import_and_predict(image_data, model):
 # modelstxray = tf.keras.models.load_model('20211113-21011636837298-Covid19-XRayDetection-Model-Good-2 (1).h5')
 # modelstct = tf.keras.models.load_model('greatCTCovid19ModelGC.h5')
 
+print("[INFO] - Loading Models")
 modelst = tf.keras.models.load_model('greatXrayCTMultiClassCovid19Model2')
 modelstxray = tf.keras.models.load_model('greatXrayCTMultiClassCovid19Model2')
 modelstct = tf.keras.models.load_model('greatXrayCTMultiClassCovid19Model2')
 
+print("[INFO] - Model loaded")
 
 @application.route("/")
 def index():
@@ -335,4 +337,4 @@ def uploadbeeko():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
