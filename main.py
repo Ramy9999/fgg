@@ -95,6 +95,11 @@ def import_and_predict(image_data, model):
 # modelstct = tf.keras.models.load_model('greatCTCovid19ModelGC.h5')
 
 print("[INFO] - Loading Models")
+
+
+print(os.stat("greatXrayCTMultiClassCovid19Model2/saved_model.pb"))
+
+
 modelst = tf.keras.models.load_model('greatXrayCTMultiClassCovid19Model2')
 modelstxray = tf.keras.models.load_model('greatXrayCTMultiClassCovid19Model2')
 modelstct = tf.keras.models.load_model('greatXrayCTMultiClassCovid19Model2')
