@@ -1,4 +1,5 @@
 from __future__ import division, print_function
+import shutil
 import sys
 import os
 import glob
@@ -12,6 +13,12 @@ from tensorflow.keras.applications.vgg16 import preprocess_input
 from flask import Flask, redirect, url_for, request, render_template
 from werkzeug.utils import secure_filename
 from gevent.pywsgi import WSGIServer
+from google.cloud import storage
+
+storage_client= storage.Client()
+bucket_name = 'fgg-models'
+bucket = storage_client.bucket(bucket_name=bucket_name)
+from pathlib import Path
 
 #newly added
 import numpy as np
@@ -44,6 +51,28 @@ cwd = os.getcwd()
 # print('Model loaded. Check http://127.0.0.1:5000/')
 
 # Predict Function
+
+
+
+
+def download_folder(prefix):
+    """Downloads the folder from the bucket"""
+    print("[INFO] Downloading folder from bucket")
+    if os.path.exists(prefix): return
+    print("[INFO] Really Downloading")
+    blobs = bucket.list_blobs(prefix=prefix)  # Get list of files
+    for blob in blobs:
+        if blob.name.endswith("/"):
+            continue
+        file_split = blob.name.split("/")
+        directory = "/".join(file_split[0:-1])
+        Path(directory).mkdir(parents=True, exist_ok=True)
+        blob.download_to_filename(blob.name) 
+
+
+
+
+
 
 
 def model_prediction(img_path, model):
@@ -95,9 +124,8 @@ def import_and_predict(image_data, model):
 # modelstct = tf.keras.models.load_model('greatCTCovid19ModelGC.h5')
 
 print("[INFO] - Loading Models")
-
-
-print(os.stat("greatXrayCTMultiClassCovid19Model2/saved_model.pb"))
+if os.path.exists("greatXrayCTMultiClassCovid19Model2"): shutil.rmtree("greatXrayCTMultiClassCovid19Model2")
+download_folder("greatXrayCTMultiClassCovid19Model2")
 
 
 modelst = tf.keras.models.load_model('greatXrayCTMultiClassCovid19Model2')
