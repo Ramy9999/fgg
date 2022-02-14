@@ -134,7 +134,7 @@ print("[INFO] - Loading Models")
 
 
 modelst = tf.keras.models.load_model('greatXrayCTMultiClassCovid19Model2')
-modelstxray = tf.keras.models.load_model('greatXrayCTMultiClassCovid19Model2')
+modelstxray = tf.keras.models.load_model('Covid19detectionXraymodelgood22')
 modelstct = tf.keras.models.load_model('greatXrayCTMultiClassCovid19Model2')
 
 print("[INFO] - Model loaded")
