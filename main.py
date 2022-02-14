@@ -13,11 +13,14 @@ from tensorflow.keras.applications.vgg16 import preprocess_input
 from flask import Flask, redirect, url_for, request, render_template
 from werkzeug.utils import secure_filename
 from gevent.pywsgi import WSGIServer
-from google.cloud import storage
 
-storage_client= storage.Client()
-bucket_name = 'fgg-models'
-bucket = storage_client.bucket(bucket_name=bucket_name)
+
+if os.environ.get('app_env') == "production":
+    from google.cloud import storage
+    storage_client= storage.Client()
+    bucket_name = 'fgg-models'
+    bucket = storage_client.bucket(bucket_name=bucket_name)
+    
 from pathlib import Path
 
 #newly added
@@ -69,7 +72,10 @@ def download_folder(prefix):
         Path(directory).mkdir(parents=True, exist_ok=True)
         blob.download_to_filename(blob.name) 
 
+if os.environ.get('app_env') == "production":
+    if os.path.exists("greatXrayCTMultiClassCovid19Model2"): shutil.rmtree("greatXrayCTMultiClassCovid19Model2")
 
+    download_folder("greatXrayCTMultiClassCovid19Model2")
 
 
 
@@ -124,8 +130,7 @@ def import_and_predict(image_data, model):
 # modelstct = tf.keras.models.load_model('greatCTCovid19ModelGC.h5')
 
 print("[INFO] - Loading Models")
-if os.path.exists("greatXrayCTMultiClassCovid19Model2"): shutil.rmtree("greatXrayCTMultiClassCovid19Model2")
-download_folder("greatXrayCTMultiClassCovid19Model2")
+
 
 
 modelst = tf.keras.models.load_model('greatXrayCTMultiClassCovid19Model2')
@@ -269,7 +274,7 @@ def uploadseeko():
         pred = prediction[0][0]
         print(prediction)
         print("pred only is: ", pred)
-        if prediction < 0.5:
+        if pred < 0.5:
             # if (pred > 0.5):
             # st.write("""
             #                                  ## **Prediction:** Covid19 Detected!
