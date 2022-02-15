@@ -14,6 +14,8 @@ To run the project:
 
 Note: the python deep learning app will take a bit of time (because it is large) to give you the localhost link where you will see the web app in action.
 
+Or you can go to this link: https://fgg-7oqlzrgw7q-uc.a.run.app/
+
 And that is it, you can play and test the code.
 
  
