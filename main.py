@@ -61,7 +61,9 @@ cwd = os.getcwd()
 def download_folder(prefix):
     """Downloads the folder from the bucket"""
     print("[INFO] Downloading folder from bucket")
-    if os.path.exists(prefix): return
+    
+    if os.path.exists(prefix): shutil.rmtree(prefix)
+    #if os.path.exists(prefix): return
     print("[INFO] Really Downloading")
     blobs = bucket.list_blobs(prefix=prefix)  # Get list of files
     for blob in blobs:
@@ -73,9 +75,9 @@ def download_folder(prefix):
         blob.download_to_filename(blob.name) 
 
 if os.environ.get('app_env') == "production":
-    if os.path.exists("greatXrayCTMultiClassCovid19Model2"): shutil.rmtree("greatXrayCTMultiClassCovid19Model2")
 
     download_folder("greatXrayCTMultiClassCovid19Model2")
+    download_folder("Covid19detectionXraymodelgood22")
 
 
 
