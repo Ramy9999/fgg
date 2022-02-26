@@ -78,7 +78,7 @@ if os.environ.get('app_env') == "production":
 
     download_folder("greatXrayCTMultiClassCovid19Model2")
     download_folder("Covid19detectionXraymodelgood22")
-
+    download_folder("greatCTCovid19ModelGC2")
 
 
 
@@ -137,7 +137,7 @@ print("[INFO] - Loading Models")
 
 modelst = tf.keras.models.load_model('greatXrayCTMultiClassCovid19Model2')
 modelstxray = tf.keras.models.load_model('Covid19detectionXraymodelgood22')
-modelstct = tf.keras.models.load_model('greatXrayCTMultiClassCovid19Model2')
+modelstct = tf.keras.models.load_model('greatCTCovid19ModelGC2')
 
 print("[INFO] - Model loaded")
 
