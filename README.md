@@ -2,6 +2,8 @@ Welcome to the Custom Covid19 Chest Image Classifier Detector
 
 Description: The project was built in PyCharm and uses the python programming language, and the project is a deep learning Chest Image Classifier that uses tensorflow and other libraries to detect whether a person has Covid19 or not in those chest images.
 
+The web application's research Project Report: https://www.academia.edu/80312473/A_Machine_Learning_Program_for_Detecting_COVID_19_in_Humans_Chest_Images_Scans
+
 To run the project:
 
 1- Download or Clone the Github Repository
